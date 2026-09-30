@@ -125,7 +125,7 @@ export const createPlayground = async (data: {
   // Validate input with Zod
   const validated = createPlaygroundSchema.safeParse(data);
   if (!validated.success) {
-    throw new Error(validated.error.errors[0]?.message || "Invalid input");
+    throw new Error(validated.error.issues[0]?.message || "Invalid input");
   }
 
   const { template, title, description } = validated.data;
@@ -175,7 +175,7 @@ export const editProjectById = async (
   // Validate input with Zod
   const validated = editProjectSchema.safeParse(data);
   if (!validated.success) {
-    throw new Error(validated.error.errors[0]?.message || "Invalid input");
+    throw new Error(validated.error.issues[0]?.message || "Invalid input");
   }
 
   try {
@@ -218,7 +218,7 @@ export const duplicateProjectById = async (id: string) => {
         templateFiles: originalPlayground.templateFiles.length > 0
           ? {
               create: originalPlayground.templateFiles.map((file) => ({
-                content: file.content,
+                content: file.content as any,
               })),
             }
           : undefined,
